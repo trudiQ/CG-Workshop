@@ -15,20 +15,20 @@
 #### Windows
 ##### Create and activate Anaconda virtual environment
   - Open Anaconda Promopt Command Window
-  - type `conda create --name cpsc360 python=3.8`
-  - type `conda activate cpsc360`
+  - type `conda create --name cgworkshop python=3.8`
+  - type `conda activate cgworkshop`
 ##### Install PyGame
   - type `pip install pygame`
 ##### Install PyOpenGL and PyOpenGL_accelerate from downloaded files
   - Navigate to the folder where you downloaded PyOpenGL-3.1.6 and PyOpenGL_accelerate-3.1.6
-    - For example, `cd Downloads\cpsc360`
+    - For example, `cd Downloads\cgworkshop`
   - type `pip install PyOpenGL-3.1.6-cp38-cp38-win_amd64.whl --force-reinstall` 
   - type `pip install PyOpenGL_accelerate-3.1.6-cp38-cp38-win_amd64.whl --force-reinstall`
 #### MacOS
 ##### Create and activate Anaconda virtual environment
   - Open Terminal
-  - type `conda create --name cpsc360 python=3.8`
-  - type `conda activate cpsc360`
+  - type `conda create --name cgworkshop python=3.8`
+  - type `conda activate cgworkshop`
 ##### Install PyGame using pip
   - type `python3 -m pip install -U pygame`
 ##### Install PyOpenGL and PyOpenGL_accelerate
@@ -39,12 +39,12 @@
 ### Run the helloworld code
 1. **Download code**
   - Under this github repo, go to Code -> Download Zip
-  - Alternatively, ***if you are familiar with git/github***, you may also clone the code from: https://github.com/trudiQ/cpsc360-SP23.git (**pull only**)
+  - Alternatively, ***if you are familiar with git/github***, you may also clone the code from: https://github.com/trudiQ/CG-Workshop.git (**pull only**)
     - if you want to save and upload your changes, ***fork it to your own repo before changing anything***
 2. **Open VScode**
   - Install Python extention 
-  - Open code folder, e.g.,'cpsc360-SP23'
-  - Select Interpreter: Python 3.8.x ('cpsc360') *# 'cpsc360' is the conda environment you just created*
+  - Open code folder, e.g.,'CG-Workshop'
+  - Select Interpreter: Python 3.8.x ('cgworkshop') *# 'cgworkshop' is the conda environment you just created*
 3. **Run python file 'helloWorld.py'**
   - Rotate the object: Hold the left-button of your mouse and drag the mouse (trackpad may also work!)
   - Reset the object: Press '0' on your keyboard
