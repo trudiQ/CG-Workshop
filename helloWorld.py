@@ -7,10 +7,13 @@ from OpenGL.GLU import *
 
 width, height = 800, 600 
 
-def example_initTeapot():
+def spinningTeapot(angle):
     glColor3f(1.0, 1.0, 1.0)                                                # specify object color as white
     glLineWidth(1.0)                                                        # reset line width to 1.0
-    glutWireTeapot(5.0) 
+    glPushMatrix()
+    glRotatef(angle, 0, 1, 0)
+    glutWireTeapot(5.0)
+    glPopMatrix() 
 
 def drawAxes():                                                             # draw x-axis and y-axis
     glLineWidth(3.0)                                                        # specify line size (1.0 default)
@@ -26,12 +29,12 @@ def drawAxes():                                                             # dr
     glVertex3f(0.0, 0.0, 100.0)                                             # v1
     glEnd()
 
-def draw():                                                                 # This is the drawing function drawing all graphics (defined by you)
+def draw(angle):                                                                 # This is the drawing function drawing all graphics (defined by you)
     glClearColor(0, 0, 0, 1)                                                # set background RGBA color 
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)                        # clear the buffers initialized in the display mode
     
-    # initialize a teapot in white at origin
-    example_initTeapot()
+    # create a teapot in white at origin and spinning around y-axis
+    spinningTeapot(angle=angle)
 
 def main():
     pygame.init()                                                           # initialize a pygame program
@@ -39,7 +42,7 @@ def main():
 
     screen = (width, height)                                                # specify the screen size of the new program window
     display_surface = pygame.display.set_mode(screen, DOUBLEBUF | OPENGL)   # create a display of size 'screen', use double-buffers and OpenGL
-    pygame.display.set_caption('CPSC 360')                                  # set title of the program window
+    pygame.display.set_caption('Hello Computer Graphis')                    # set title of the program window
 
     glEnable(GL_DEPTH_TEST)
     glMatrixMode(GL_PROJECTION)                                             # set mode to projection transformation
@@ -47,14 +50,11 @@ def main():
     gluPerspective(45, (width / height), 0.1, 100.0)                        # specify perspective projection view volume
 
     glMatrixMode(GL_MODELVIEW)                                              # set mode to modelview (geometric + view transf)
+    gluLookAt(0, 0, 50, 0, 0, -1, 0, 1, 0)
     initmodelMatrix = glGetFloat(GL_MODELVIEW_MATRIX)
-    modelMatrix = glGetFloat(GL_MODELVIEW_MATRIX)
-
+    angle = 0
     while True:
         bResetModelMatrix = False
-        glPushMatrix()
-        glLoadIdentity()
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -63,25 +63,23 @@ def main():
                 if pygame.mouse.get_pressed()[0]:
                     glRotatef(event.rel[1], 1, 0, 0)
                     glRotatef(event.rel[0], 0, 1, 0)
-                    #print(event.rel[0], event.rel[1])
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_0:
                     bResetModelMatrix = True        
 
-        #glRotatef(1, 0, 1, 0)                                              # allow the whole scene to spin around y-axis
-        if (bResetModelMatrix):
-            glLoadIdentity()
-            modelMatrix = initmodelMatrix
-        glMultMatrixf(modelMatrix)
-        modelMatrix = glGetFloatv(GL_MODELVIEW_MATRIX)
-
-        glLoadIdentity()
-        gluLookAt(0, 0, 50, 0, 0, -1, 0, 1, 0)
-        glMultMatrixf(modelMatrix)
-        draw()
+        angle += 1
+        draw(angle=angle)
         drawAxes()
+        
+        # reset the current model-view back to the initial matrix
+        if (bResetModelMatrix):
+            glLoadMatrixf(initmodelMatrix)
 
+        # draw x, y, z axes without involving any transformations
+        glPushMatrix()
+        glLoadMatrixf(initmodelMatrix)
+        #drawAxes()
         glPopMatrix()
         pygame.display.flip()
         pygame.time.wait(10)

@@ -1,4 +1,4 @@
-# CPSC 360
+# Computer Graphics Workshop
 ## PyGame and PyOpenGL Setup
 ### Installation
 1. **Download software**:
