@@ -6,14 +6,60 @@ from OpenGL.GLUT import *
 from OpenGL.GLU import *
 
 width, height = 800, 600 
+rotAngle = 0 # rotation angle around y-axis, incremental 
+translateVec = [0.0, 0.0, 0.0] # translate along x, y, z
 
-def spinningTeapot(angle):
-    glColor3f(1.0, 1.0, 1.0)                                                # specify object color as white
-    glLineWidth(1.0)                                                        # reset line width to 1.0
+vertices = (
+    (1, -1, -1),        #v0
+    (1, 1, -1),         #v1
+    (-1, 1, -1),        #v2
+    (-1, -1, -1),       #v3
+    (1, -1, 1),         #v4 
+    (1, 1, 1),          #v5
+    (-1, 1, 1),         #v6
+    (-1, -1, 1)         #v7
+)
+
+edges = (
+    (0, 1),             #e0: v0,v1
+    (0, 3),
+    (0, 4),
+    (2, 1),
+    (2, 3),
+    (2, 6),
+    (7, 3),
+    (7, 4),
+    (7, 6),
+    (5, 1),
+    (5, 4),
+    (5, 6)
+)
+
+faces = (
+    (0, 1, 5, 4),       #f0: v0,v1,v5,v4
+    (3, 2, 6, 7),
+    (1, 2, 6, 5),
+    (0, 3, 7, 4),
+    (0, 1, 2, 3),
+    (4, 5, 6, 7)
+)
+
+def Cube():
     glPushMatrix()
-    glRotatef(angle, 0, 1, 0)
-    glutWireTeapot(5.0)
-    glPopMatrix() 
+    # TODO: transform the cube
+
+
+    # TODO: draw faces (quads)
+
+
+    # TODO: draw edges (lines)
+
+    
+    # TODO: draw vertices
+
+
+    glPopMatrix()
+    pass
 
 def drawAxes():                                                             # draw x-axis and y-axis
     glLineWidth(3.0)                                                        # specify line size (1.0 default)
@@ -29,12 +75,15 @@ def drawAxes():                                                             # dr
     glVertex3f(0.0, 0.0, 100.0)                                             # v1
     glEnd()
 
-def draw(angle):                                                                 # This is the drawing function drawing all graphics (defined by you)
+def draw():                                                     # This is the drawing function drawing all graphics (defined by you)
     glClearColor(0, 0, 0, 1)                                                # set background RGBA color 
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)                        # clear the buffers initialized in the display mode
     
-    # create a teapot in white at origin and spinning around y-axis
-    spinningTeapot(angle=angle)
+    # create a spinning cube
+    Cube()
+
+    # TODO: create a movable cube
+
 
 def main():
     pygame.init()                                                           # initialize a pygame program
@@ -42,7 +91,7 @@ def main():
 
     screen = (width, height)                                                # specify the screen size of the new program window
     display_surface = pygame.display.set_mode(screen, DOUBLEBUF | OPENGL)   # create a display of size 'screen', use double-buffers and OpenGL
-    pygame.display.set_caption('Hello Computer Graphics')                    # set title of the program window
+    pygame.display.set_caption('Hello Cube')                                # set title of the program window
 
     glEnable(GL_DEPTH_TEST)
     glMatrixMode(GL_PROJECTION)                                             # set mode to projection transformation
@@ -50,9 +99,9 @@ def main():
     gluPerspective(45, (width / height), 0.1, 100.0)                        # specify perspective projection view volume
 
     glMatrixMode(GL_MODELVIEW)                                              # set mode to modelview (geometric + view transf)
-    gluLookAt(0, 0, 50, 0, 0, -1, 0, 1, 0)
+    gluLookAt(0, 0, 10, 0, 0, -1, 0, 1, 0)
     initmodelMatrix = glGetFloat(GL_MODELVIEW_MATRIX)
-    angle = 0
+    global translateVec
     while True:
         bResetModelMatrix = False
         for event in pygame.event.get():
@@ -65,22 +114,20 @@ def main():
                     glRotatef(event.rel[0], 0, 1, 0)
 
             if event.type == pygame.KEYDOWN:
+                # '0' reset the view
                 if event.key == pygame.K_0:
-                    bResetModelMatrix = True        
+                    bResetModelMatrix = True
 
-        angle += 1
-        draw(angle=angle)
+                # TODO: keyboard controls "movableCube"    
+
+
+        draw()
         drawAxes()
         
         # reset the current model-view back to the initial matrix
         if (bResetModelMatrix):
             glLoadMatrixf(initmodelMatrix)
-
-        # draw x, y, z axes without involving any transformations
-        glPushMatrix()
-        glLoadMatrixf(initmodelMatrix)
-        #drawAxes()
-        glPopMatrix()
+            
         pygame.display.flip()
         pygame.time.wait(10)
 
